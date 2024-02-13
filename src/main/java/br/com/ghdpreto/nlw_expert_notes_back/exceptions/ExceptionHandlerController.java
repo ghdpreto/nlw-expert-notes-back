@@ -11,6 +11,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import br.com.ghdpreto.nlw_expert_notes_back.exceptions.dto.ExceptionErroDTO;
 import br.com.ghdpreto.nlw_expert_notes_back.exceptions.dto.MensagemErroDTO;
 
 @ControllerAdvice
@@ -40,4 +41,17 @@ public class ExceptionHandlerController {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(NaoEncontradoException.class)
+    public ResponseEntity<Object> handleNaoEncontradoResponse(Exception e) {
+        ExceptionErroDTO erro = new ExceptionErroDTO(e.getMessage());
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Object> handleException(Exception e) {
+        ExceptionErroDTO erro = new ExceptionErroDTO(e.getMessage());
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(erro);
+    }
 }
