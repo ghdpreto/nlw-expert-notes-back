@@ -6,12 +6,13 @@ import java.util.List;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import br.com.ghdpreto.nlw_expert_notes_back.exceptions.dto.ExceptionErroDTO;
 import br.com.ghdpreto.nlw_expert_notes_back.exceptions.dto.MensagemErroDTO;
 
 @ControllerAdvice
@@ -41,4 +42,17 @@ public class ExceptionHandlerController {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(NaoEncontradoException.class)
+    public ResponseEntity<Object> handleNaoEncontradoResponse(Exception e) {
+        ExceptionErroDTO erro = new ExceptionErroDTO(e.getMessage());
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Object> handleException(Exception e) {
+        ExceptionErroDTO erro = new ExceptionErroDTO(e.getMessage());
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(erro);
+    }
 }

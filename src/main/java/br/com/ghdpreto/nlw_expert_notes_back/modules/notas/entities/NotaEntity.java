@@ -5,6 +5,9 @@ import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import br.com.ghdpreto.nlw_expert_notes_back.modules.usuario.entities.UsuarioEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -37,6 +40,7 @@ public class NotaEntity {
 
     @ManyToOne
     @JoinColumn(name = "usuario_id", insertable = false, updatable = false)
+    @JsonBackReference
     private UsuarioEntity usuarioEntity;
 
     @CreationTimestamp

@@ -6,8 +6,10 @@ import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import br.com.ghdpreto.nlw_expert_notes_back.modules.notas.entities.NotaEntity;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -33,6 +35,7 @@ public class UsuarioEntity {
     private String password;
 
     @OneToMany(mappedBy = "usuarioEntity")
+    @JsonManagedReference
     private List<NotaEntity> notaEntities;
 
     @CreationTimestamp

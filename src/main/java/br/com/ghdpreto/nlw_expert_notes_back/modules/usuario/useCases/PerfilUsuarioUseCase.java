@@ -21,7 +21,7 @@ public class PerfilUsuarioUseCase {
         var usuario = this.usuarioRepository.findById(id);
 
         if (usuario.isEmpty()) {
-            throw new NaoEncontradoException();
+            throw new NaoEncontradoException("Usuario");
         }
 
         return usuario.get();
