@@ -7,7 +7,6 @@ import br.com.ghdpreto.nlw_expert_notes_back.modules.notas.entities.NotaEntity;
 import br.com.ghdpreto.nlw_expert_notes_back.modules.notas.useCases.CadastrarNotaUseCase;
 import br.com.ghdpreto.nlw_expert_notes_back.modules.notas.useCases.ListarNotasUseCase;
 import jakarta.validation.Valid;
-import jakarta.websocket.server.PathParam;
 
 import java.util.List;
 import java.util.UUID;

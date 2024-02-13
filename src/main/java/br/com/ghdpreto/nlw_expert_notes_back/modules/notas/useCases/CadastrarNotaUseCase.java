@@ -1,7 +1,5 @@
 package br.com.ghdpreto.nlw_expert_notes_back.modules.notas.useCases;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

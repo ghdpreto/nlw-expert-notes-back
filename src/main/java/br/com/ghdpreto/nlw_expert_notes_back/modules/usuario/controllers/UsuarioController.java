@@ -11,13 +11,11 @@ import br.com.ghdpreto.nlw_expert_notes_back.modules.usuario.dto.PerfilUsuarioRe
 import br.com.ghdpreto.nlw_expert_notes_back.modules.usuario.useCases.AtualizarUsuarioUseCase;
 import br.com.ghdpreto.nlw_expert_notes_back.modules.usuario.useCases.CadastrarUsuarioUseCase;
 import br.com.ghdpreto.nlw_expert_notes_back.modules.usuario.useCases.PerfilUsuarioUseCase;
-import jakarta.validation.ReportAsSingleViolation;
 import jakarta.validation.Valid;
 
 import java.net.URI;
 import java.util.UUID;
 
-import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
 @RequestMapping("/usuario")
