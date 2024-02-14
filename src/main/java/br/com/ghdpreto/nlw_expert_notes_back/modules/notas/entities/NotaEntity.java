@@ -40,6 +40,7 @@ public class NotaEntity {
     @ManyToOne
     @JoinColumn(name = "usuario_id", insertable = false, updatable = false)
     @JsonBackReference
+
     private UsuarioEntity usuarioEntity;
 
     @CreationTimestamp
