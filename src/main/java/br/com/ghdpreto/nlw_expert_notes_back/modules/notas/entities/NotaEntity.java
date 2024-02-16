@@ -8,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import br.com.ghdpreto.nlw_expert_notes_back.modules.usuario.entities.UsuarioEntity;
+import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

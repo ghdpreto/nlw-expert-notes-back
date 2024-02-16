@@ -11,7 +11,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class NotaDTO {
+
+public class CriarNotaDTO {
     @NotBlank
     private String conteudo;
 

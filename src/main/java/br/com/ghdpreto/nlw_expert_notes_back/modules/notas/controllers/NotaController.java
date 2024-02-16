@@ -2,8 +2,10 @@ package br.com.ghdpreto.nlw_expert_notes_back.modules.notas.controllers;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.ghdpreto.nlw_expert_notes_back.modules.notas.dto.NotaDTO;
+import br.com.ghdpreto.nlw_expert_notes_back.modules.notas.dto.CriarNotaDTO;
+import br.com.ghdpreto.nlw_expert_notes_back.modules.notas.dto.NotaResponseDTO;
 import br.com.ghdpreto.nlw_expert_notes_back.modules.notas.entities.NotaEntity;
+import br.com.ghdpreto.nlw_expert_notes_back.modules.notas.swagger.CriarNotaSwagger;
 import br.com.ghdpreto.nlw_expert_notes_back.modules.notas.useCases.CadastrarNotaUseCase;
 import br.com.ghdpreto.nlw_expert_notes_back.modules.notas.useCases.ListarNotasUseCase;
 import jakarta.validation.Valid;
@@ -31,11 +33,19 @@ public class NotaController {
     private ListarNotasUseCase listarNotasUseCase;
 
     @PostMapping()
-    public ResponseEntity<NotaEntity> criarNota(@Valid @RequestBody NotaDTO body) {
+    @CriarNotaSwagger()
+    public ResponseEntity<NotaResponseDTO> criarNota(@Valid @RequestBody CriarNotaDTO body) {
 
-        var response = this.cadastrarNotaUseCase.execute(body);
+        var resultado = this.cadastrarNotaUseCase.execute(body);
 
-        return new ResponseEntity<NotaEntity>(response, HttpStatus.CREATED);
+        NotaResponseDTO response = NotaResponseDTO.builder()
+                .conteudo(resultado.getConteudo())
+                .usuarioID(resultado.getUsuarioID())
+                .dataCriacao(resultado.getDataCriacao())
+                .id(resultado.getId())
+                .build();
+
+        return new ResponseEntity<NotaResponseDTO>(response, HttpStatus.CREATED);
     }
 
     @GetMapping("/{idUsuario}")
