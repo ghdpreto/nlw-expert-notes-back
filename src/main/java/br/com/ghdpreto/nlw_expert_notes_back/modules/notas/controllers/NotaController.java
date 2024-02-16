@@ -6,12 +6,14 @@ import br.com.ghdpreto.nlw_expert_notes_back.modules.notas.dto.CriarNotaDTO;
 import br.com.ghdpreto.nlw_expert_notes_back.modules.notas.dto.NotaResponseDTO;
 import br.com.ghdpreto.nlw_expert_notes_back.modules.notas.entities.NotaEntity;
 import br.com.ghdpreto.nlw_expert_notes_back.modules.notas.swagger.CriarNotaSwagger;
+import br.com.ghdpreto.nlw_expert_notes_back.modules.notas.swagger.ListarNotaSwagger;
 import br.com.ghdpreto.nlw_expert_notes_back.modules.notas.useCases.CadastrarNotaUseCase;
 import br.com.ghdpreto.nlw_expert_notes_back.modules.notas.useCases.ListarNotasUseCase;
 import jakarta.validation.Valid;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -49,10 +51,20 @@ public class NotaController {
     }
 
     @GetMapping("/{idUsuario}")
-    public ResponseEntity<List<NotaEntity>> listaPorUsuario(@PathVariable UUID idUsuario) {
+    @ListarNotaSwagger()
+    public ResponseEntity<List<NotaResponseDTO>> listaPorUsuario(@PathVariable UUID idUsuario) {
 
-        var response = this.listarNotasUseCase.execute(idUsuario);
+        var notas = this.listarNotasUseCase.execute(idUsuario);
 
-        return new ResponseEntity<List<NotaEntity>>(response, HttpStatus.OK);
+        List<NotaResponseDTO> response = notas.stream().map((nota) -> {
+            return NotaResponseDTO.builder()
+                    .conteudo(nota.getConteudo())
+                    .usuarioID(nota.getUsuarioID())
+                    .dataCriacao(nota.getDataCriacao())
+                    .id(nota.getId())
+                    .build();
+        }).collect(Collectors.toList());
+
+        return new ResponseEntity<List<NotaResponseDTO>>(response, HttpStatus.OK);
     }
 }
