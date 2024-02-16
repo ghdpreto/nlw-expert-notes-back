@@ -3,14 +3,16 @@ package br.com.ghdpreto.nlw_expert_notes_back.modules.usuario.controllers;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import br.com.ghdpreto.nlw_expert_notes_back.exceptions.NaoEncontradoException;
-import br.com.ghdpreto.nlw_expert_notes_back.exceptions.UsuarioEncontradoException;
 import br.com.ghdpreto.nlw_expert_notes_back.modules.usuario.dto.AtualizarUsuarioDTO;
 import br.com.ghdpreto.nlw_expert_notes_back.modules.usuario.dto.CadastrarUsuarioDTO;
 import br.com.ghdpreto.nlw_expert_notes_back.modules.usuario.dto.PerfilUsuarioResponseDTO;
+import br.com.ghdpreto.nlw_expert_notes_back.modules.usuario.swagger.AtualizarUsuarioSwagger;
+import br.com.ghdpreto.nlw_expert_notes_back.modules.usuario.swagger.CadastrarUsuarioSwagger;
+import br.com.ghdpreto.nlw_expert_notes_back.modules.usuario.swagger.PerfilUsuarioSwagger;
 import br.com.ghdpreto.nlw_expert_notes_back.modules.usuario.useCases.AtualizarUsuarioUseCase;
 import br.com.ghdpreto.nlw_expert_notes_back.modules.usuario.useCases.CadastrarUsuarioUseCase;
 import br.com.ghdpreto.nlw_expert_notes_back.modules.usuario.useCases.PerfilUsuarioUseCase;
+
 import jakarta.validation.Valid;
 
 import java.net.URI;
@@ -39,63 +41,45 @@ public class UsuarioController {
     AtualizarUsuarioUseCase atualizarUsuarioUseCase;
 
     @PostMapping()
-    public ResponseEntity<Object> cadastrar(@Valid @RequestBody CadastrarUsuarioDTO dto) {
-        try {
-            var result = this.cadastrarUsuarioUseCase.execute(dto);
+    @CadastrarUsuarioSwagger()
+    public ResponseEntity<String> cadastrar(@Valid @RequestBody CadastrarUsuarioDTO dto) {
+        var result = this.cadastrarUsuarioUseCase.execute(dto);
 
-            // criando URI
-            String uri = ServletUriComponentsBuilder
-                    .fromCurrentRequest()
-                    .path("/{id}")
-                    .buildAndExpand(result.getId())
-                    .toUriString();
-            return ResponseEntity.created(URI.create(uri)).build();
+        // criando URI
+        String uri = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(result.getId())
+                .toUriString();
 
-        } catch (UsuarioEncontradoException e) {
+        return ResponseEntity.created(URI.create(uri)).build();
 
-            return ResponseEntity.badRequest().body(e.getMessage());
-
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().body(e.getMessage());
-        }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> perfil(@PathVariable UUID id) {
+    @PerfilUsuarioSwagger()
+    public ResponseEntity<PerfilUsuarioResponseDTO> perfil(@PathVariable UUID id) {
 
-        try {
-            var usuario = this.perfilUsuarioUseCase.execute(id);
+        var usuario = this.perfilUsuarioUseCase.execute(id);
 
-            PerfilUsuarioResponseDTO response = PerfilUsuarioResponseDTO.builder()
-                    .email(usuario.getEmail())
-                    .nome(usuario.getNome())
-                    .id(usuario.getId())
-                    .build();
+        PerfilUsuarioResponseDTO response = PerfilUsuarioResponseDTO.builder()
+                .email(usuario.getEmail())
+                .nome(usuario.getNome())
+                .id(usuario.getId())
+                .build();
 
-            return ResponseEntity.ok().body(response);
-
-        } catch (NaoEncontradoException e) {
-            return ResponseEntity.notFound().build();
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().body(e.getMessage());
-        }
+        return ResponseEntity.ok().body(response);
 
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Object> atualizar(@PathVariable UUID id, @Valid @RequestBody AtualizarUsuarioDTO dto) {
+    @AtualizarUsuarioSwagger()
+    public ResponseEntity<String> atualizar(@PathVariable UUID id, @Valid @RequestBody AtualizarUsuarioDTO dto) {
 
-        try {
-            var response = this.atualizarUsuarioUseCase.execute(id, dto);
+        var response = this.atualizarUsuarioUseCase.execute(id, dto);
 
-            System.out.println(response);
-            return ResponseEntity.noContent().build();
-
-        } catch (NaoEncontradoException e) {
-            return ResponseEntity.notFound().build();
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().body(e.getMessage());
-        }
+        System.out.println(response);
+        return ResponseEntity.noContent().build();
 
     }
 }
