@@ -12,4 +12,5 @@ import br.com.ghdpreto.nlw_expert_notes_back.modules.notas.entities.NotaEntity;
 public interface NotaRepository extends JpaRepository<NotaEntity, UUID> {
 
     List<NotaEntity> findByUsuarioID(UUID usuarioID);
+
 }

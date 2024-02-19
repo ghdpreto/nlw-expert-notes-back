@@ -4,10 +4,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.ghdpreto.nlw_expert_notes_back.modules.notas.dto.CriarNotaDTO;
 import br.com.ghdpreto.nlw_expert_notes_back.modules.notas.dto.NotaResponseDTO;
-import br.com.ghdpreto.nlw_expert_notes_back.modules.notas.entities.NotaEntity;
 import br.com.ghdpreto.nlw_expert_notes_back.modules.notas.swagger.CriarNotaSwagger;
+import br.com.ghdpreto.nlw_expert_notes_back.modules.notas.swagger.DeletarNotaSwagger;
 import br.com.ghdpreto.nlw_expert_notes_back.modules.notas.swagger.ListarNotaSwagger;
 import br.com.ghdpreto.nlw_expert_notes_back.modules.notas.useCases.CadastrarNotaUseCase;
+import br.com.ghdpreto.nlw_expert_notes_back.modules.notas.useCases.DeletarNotaUseCase;
 import br.com.ghdpreto.nlw_expert_notes_back.modules.notas.useCases.ListarNotasUseCase;
 import jakarta.validation.Valid;
 
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,6 +35,9 @@ public class NotaController {
 
     @Autowired
     private ListarNotasUseCase listarNotasUseCase;
+
+    @Autowired
+    private DeletarNotaUseCase deletarNotaUseCase;
 
     @PostMapping()
     @CriarNotaSwagger()
@@ -67,4 +72,13 @@ public class NotaController {
 
         return new ResponseEntity<List<NotaResponseDTO>>(response, HttpStatus.OK);
     }
+
+    @DeleteMapping("/{idUsuario}/{idNota}")
+    @DeletarNotaSwagger()
+    public ResponseEntity<Object> deletar(@PathVariable UUID idUsuario, @PathVariable UUID idNota) {
+        this.deletarNotaUseCase.execute(idUsuario, idNota);
+
+        return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
+    }
+
 }
